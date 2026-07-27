@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=no">
+    <title>Auto Posto Estrela D'alva</title>
+    <link rel="icon" type="image/png" href="03.PNG">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- CSS Principal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar" data-aos="fade-down" data-aos-duration="800">
+        <div class="container">
+            <a href="tel:+5595991740090"><i class="fas fa-phone"></i> +55 95 99174-0090</a>
+            <a href="#"><i class="fas fa-map-pin"></i> Localizar o Posto</a>
+            <a href="#"><i class="fas fa-user"></i> Área do Cliente</a>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar-premium" data-aos="fade-down" data-aos-duration="800" data-aos-delay="100">
+        <a href="#" class="brand-logo">
+            <img src="02.PNG" alt="Auto Posto Estrela D'Alva">
+        </a>
+        <div class="nav-links-premium">
+            <a href="#"><i class="fas fa-home"></i> Início</a>
+            <a href="#combustiveis"><i class="fas fa-fire"></i> Combustíveis</a>
+            <a href="#servicos"><i class="fas fa-concierge-bell"></i> Serviços</a>
+            <a href="#app"><i class="fas fa-mobile-alt"></i> App</a>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <!-- BANNER -->
+        <div class="banner-wrapper" data-aos="fade-up" data-aos-duration="1000">
+            <div class="banner-infinito" id="bannerInfinito">
+                <div class="slides-infinito" id="slidesInfinito">
+                    <div class="slide-infinito"></div>
+                    <div class="slide-infinito"></div>
+                    <div class="slide-infinito"></div>
+                    <div class="slide-infinito"></div>
+                    <div class="slide-infinito"></div>
+                </div>
+                <div class="banner-drag-hint">🖱️ Arraste para os lados</div>
+            </div>
+        </div>
+
+        <!-- APP -->
+        <div class="app-section" id="app" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+            <div class="app-content">
+                <span class="app-badge"><i class="fas fa-mobile-alt"></i> Baixe agora</span>
+                <h2>Estrela <span>Dalva+</span></h2>
+                <p>Abasteça, acumule pontos e tenha vantagens exclusivas na palma da sua mão.</p>
+                <div class="app-features">
+                    <span class="feature"><i class="fas fa-check-circle"></i> Abastecimento rápido</span>
+                    <span class="feature"><i class="fas fa-check-circle"></i> Pontos e descontos</span>
+                    <span class="feature"><i class="fas fa-check-circle"></i> Histórico completo</span>
+                    <span class="feature"><i class="fas fa-check-circle"></i> Postos próximos</span>
+                </div>
+                <div class="app-buttons">
+                    <a href="#" class="btn-app"><i class="fab fa-apple"></i> App Store</a>
+                    <a href="#" class="btn-app"><i class="fab fa-google-play"></i> Google Play</a>
+                </div>
+            </div>
+            <div class="app-image" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="400">
+                <img src="/FOTO/boneco.png" alt="App" loading="lazy">
+            </div>
+        </div>
+
+        <!-- BRINDES -->
+        <div class="brindes-section" data-aos="fade-up" data-aos-duration="1000">
+            <div class="titulo-brinde">
+                <span>🎁</span> Brindes do Aplicativo
+            </div>
+            <div class="status-scroll">
+                <span id="statusTexto">▶️ Arraste para explorar os brindes</span>
+            </div>
+            <div class="scroll-wrapper" id="scrollWrapper">
+                <div class="track-brinde" id="trackBrinde">
+                    <div class="card-brinde">
+                        <img class="img-brinde" src="04.png" alt="Brinde" loading="lazy">
+                        <span class="badge">Resgate</span>
+                        <div class="nome-brinde">Aromatizante Automotivo</div>
+                        <div class="pontos">Resgate com <strong>500 pontos</strong></div>
+                        <button class="btn-resgatar">Resgatar Agora</button>
+                    </div>
+                    <div class="card-brinde">
+                        <img class="img-brinde" src="04.png" alt="Brinde" loading="lazy">
+                        <span class="badge">Resgate</span>
+                        <div class="nome-brinde">Kit Limpeza Premium</div>
+                        <div class="pontos">Resgate com <strong>800 pontos</strong></div>
+                        <button class="btn-resgatar">Resgatar Agora</button>
+                    </div>
+                    <div class="card-brinde">
+                        <img class="img-brinde" src="04.png" alt="Brinde" loading="lazy">
+                        <span class="badge">Resgate</span>
+                        <div class="nome-brinde">Capa para Volante</div>
+                        <div class="pontos">Resgate com <strong>1.200 pontos</strong></div>
+                        <button class="btn-resgatar">Resgatar Agora</button>
+                    </div>
+                    <div class="card-brinde">
+                        <img class="img-brinde" src="04.png" alt="Brinde" loading="lazy">
+                        <span class="badge">Resgate</span>
+                        <div class="nome-brinde">Tapete Automotivo</div>
+                        <div class="pontos">Resgate com <strong>2.000 pontos</strong></div>
+                        <button class="btn-resgatar">Resgatar Agora</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMBUSTÍVEIS -->
+        <div class="section-title" id="combustiveis" data-aos="fade-down" data-aos-duration="800">
+            <h3>Nossos <span>Combustíveis</span></h3>
+            <p>Preços competitivos com as melhores condições de pagamento.</p>
+        </div>
+
+        <div class="fuels-grid">
+            <!-- Gasolina Comum -->
+            <div class="fuel-card" data-aos="zoom-in-up" data-aos-duration="800" data-aos-delay="100">
+                <div class="fuel-letter" style="color: rgba(0, 38, 255, 0.884);">G</div>
+                <span class="fuel-name">Gasolina Comum</span>
+                <span class="fuel-quality"><i class="fas fa-circle-check"></i> Octanagem 95</span>
+                <div class="prices">
+                    <div class="price-item cash">
+                        <span class="label">DINHEIRO / PIX / DÉBITO</span>
+                        <span class="value"><span class="currency">R$</span> 6,<span class="cents">09</span></span>
+                    </div>
+                    <div class="price-divider"></div>
+                    <div class="price-item credit">
+                        <span class="label">Cartão Crédito</span>
+                        <span class="value"><span class="currency">R$</span> 7,<span class="cents">59</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gasolina Premium -->
+            <div class="fuel-card" data-aos="zoom-in-up" data-aos-duration="800" data-aos-delay="200">
+                <div class="fuel-letter" style="color: var(--red);">G</div>
+                <span class="fuel-name">Gasolina Premium</span>
+                <span class="fuel-quality"><i class="fas fa-circle-check"></i> Octanagem 98</span>
+                <div class="prices">
+                    <div class="price-item cash">
+                        <span class="label">DINHEIRO / PIX / DÉBITO</span>
+                        <span class="value"><span class="currency">R$</span> 6,<span class="cents">69</span></span>
+                    </div>
+                    <div class="price-divider"></div>
+                    <div class="price-item credit">
+                        <span class="label">Cartão Crédito</span>
+                        <span class="value"><span class="currency">R$</span> 8,<span class="cents">19</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diesel -->
+            <div class="fuel-card" data-aos="zoom-in-up" data-aos-duration="800" data-aos-delay="300">
+                <div class="fuel-letter" style="color: var(--dark);">C</div>
+                <span class="fuel-name">Diesel S10</span>
+                <span class="fuel-quality"><i class="fas fa-circle-check"></i> Baixo Enxofre</span>
+                <div class="prices">
+                    <div class="price-item cash">
+                        <span class="label">DINHEIRO / PIX / DÉBITO</span>
+                        <span class="value"><span class="currency">R$</span> 6,<span class="cents">89</span></span>
+                    </div>
+                    <div class="price-divider"></div>
+                    <div class="price-item credit">
+                        <span class="label">Cartão Crédito</span>
+                        <span class="value"><span class="currency">R$</span> 8,<span class="cents">39</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Etanol -->
+            <div class="fuel-card" data-aos="zoom-in-up" data-aos-duration="800" data-aos-delay="400">
+                <div class="fuel-letter" style="color: #2ecc71;">D</div>
+                <span class="fuel-name">Etanol Combustível</span>
+                <span class="fuel-quality"><i class="fas fa-circle-check"></i> Renovável</span>
+                <div class="prices">
+                    <div class="price-item cash">
+                        <span class="label">DINHEIRO / PIX / DÉBITO</span>
+                        <span class="value"><span class="currency">R$</span> 3,<span class="cents">99</span></span>
+                    </div>
+                    <div class="price-divider"></div>
+                    <div class="price-item credit">
+                        <span class="label">Cartão Crédito</span>
+                        <span class="value"><span class="currency">R$</span> 5,<span class="cents">49</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SERVIÇOS -->
+        <div class="section-title" id="servicos" data-aos="fade-down" data-aos-duration="800">
+            <h3>Serviços <span>Estrela D'Alva</span></h3>
+            <p>Conheça nossos parceiros com a qualidade que você merece.</p>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-card" data-aos="fade-right" data-aos-duration="800" data-aos-delay="100">
+                <div class="service-image" data-carousel>
+                    <div class="carousel-wrapper">
+                        <div class="carousel-slides">
+                            <img src="FOTO/HHF_0398.jpg" alt="1" loading="lazy">
+                            <img src="FOTO/08.jpg" alt="2" loading="lazy">
+                            <img src="FOTO/09.jpg" alt="3" loading="lazy">
+                        </div>
+                    </div>
+                    <span class="slide-counter">1 / 3</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="service-body">
+                    <h4>Premium Açaí</h4>
+                    <p>Açaí cremoso, café gourmet e muito mais.</p>
+                    <a href="https://www.instagram.com/premiumacaibv/" class="btn-instagram" target="_blank">
+                        <i class="fab fa-instagram"></i> Siga no Instagram
+                    </a>
+                </div>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                <div class="service-image" data-carousel>
+                    <div class="carousel-wrapper">
+                        <div class="carousel-slides">
+                            <img src="07.jpg" alt="1" loading="lazy">
+                            <img src="FOTO/08.jpg" alt="2" loading="lazy">
+                            <img src="FOTO/09.jpg" alt="3" loading="lazy">
+                        </div>
+                    </div>
+                    <span class="slide-counter">1 / 3</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="service-body">
+                    <h4>Conveniência Bolota</h4>
+                    <p>Snacks, bebidas e itens essenciais.</p>
+                    <a href="https://www.instagram.com/convenienciadobolotarr/" class="btn-instagram" target="_blank">
+                        <i class="fab fa-instagram"></i> Siga no Instagram
+                    </a>
+                </div>
+            </div>
+
+            <div class="service-card" data-aos="fade-left" data-aos-duration="800" data-aos-delay="300">
+                <div class="service-image" data-carousel>
+                    <div class="carousel-wrapper">
+                        <div class="carousel-slides">
+                            <img src="FOTO/HHF_0398.jpg" alt="1" loading="lazy">
+                            <img src="FOTO/08.jpg" alt="2" loading="lazy">
+                            <img src="FOTO/09.jpg" alt="3" loading="lazy">
+                        </div>
+                    </div>
+                    <span class="slide-counter">1 / 3</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="service-body">
+                    <h4>Help Pragas</h4>
+                    <p>Dedetização e controle de pragas.</p>
+                    <a href="https://www.instagram.com/helppragas/" class="btn-instagram" target="_blank">
+                        <i class="fab fa-instagram"></i> Siga no Instagram
+                    </a>
+                </div>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
+                <div class="service-image" data-carousel>
+                    <div class="carousel-wrapper">
+                        <div class="carousel-slides">
+                            <img src="FOTO/HHF_0398.jpg" alt="1" loading="lazy">
+                            <img src="FOTO/08.jpg" alt="2" loading="lazy">
+                            <img src="FOTO/09.jpg" alt="3" loading="lazy">
+                        </div>
+                    </div>
+                    <span class="slide-counter">1 / 3</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="service-body">
+                    <h4>Econorte</h4>
+                    <p>Produtos e serviços automotivos.</p>
+                    <a href="https://www.instagram.com/econorterr/" class="btn-instagram" target="_blank">
+                        <i class="fab fa-instagram"></i> Siga no Instagram
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- LUBRIFICANTES -->
+        <div class="lub-carrossel-wrapper" data-aos="fade-up" data-aos-duration="1000">
+            <h2 class="lub-carrossel-titulo">
+                Lubrificante <span class="lub-destaque-vermelho">Automotivo</span>
+            </h2>
+            <div class="lub-carrossel-container" id="lubContainer">
+                <div class="lub-carrossel-track" id="lubTrack"></div>
+            </div>
+        </div>
+
+        <!-- PARCEIROS -->
+        <div class="parceiros-wrapper" data-aos="fade-up" data-aos-duration="1000">
+            <h2 class="carousel-title">
+                Nossos <span class="highlight">Parceiros</span>
+            </h2>
+            <div class="parceiros-carousel-container" id="parceirosContainer">
+                <div class="parceiros-carousel-track" id="parceirosTrack"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer" data-aos="fade-up" data-aos-duration="800">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="02.PNG" alt="Logo" loading="lazy">
+                </div>
+                <div class="footer-links">
+                    <a href="#">Sobre</a>
+                    <a href="#">Imprensa</a>
+                    <a href="#">Trabalhe conosco</a>
+                    <a href="#">Política de qualidade</a>
+                </div>
+                <div class="footer-social">
+                    <a href="https://www.instagram.com/autopostoestreladalvarr/" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://wa.me/5595991740090" target="_blank">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-copy">
+                <i class="fas fa-gas-pump" style="color:var(--red); margin-right:6px;"></i> 
+                Auto Posto Estrela D'alva · 2024
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>
