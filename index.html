@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Auto Posto Estrela D'alva</title>
     <link rel="icon" type="image/png" href="Logo do Posto site/03.png">
     
@@ -244,122 +244,143 @@
             </div>
         </div>
 
-        <!-- SERVIÇOS -->
-        <div class="section-title" id="servicos" data-aos="fade-down" data-aos-duration="800">
-            <h3>Serviços <span>Estrela D'Alva</span></h3>
-            <p>Conheça nossos parceiros com a qualidade que você merece.</p>
-        </div>
+        <!-- SERVIÇOS - CARROSSEL DE 4 CARDS -->
+        <div class="services-carousel-wrapper" id="servicos" data-aos="fade-up" data-aos-duration="1000">
+            <div class="services-carousel-title" data-aos="fade-down" data-aos-duration="800">
+                <h3>Serviços <span>Estrela D'Alva</span></h3>
+                <p>Conheça nossos parceiros com a qualidade que você merece.</p>
+            </div>
 
-        <div class="services-grid">
-            <div class="service-card" data-aos="fade-right" data-aos-duration="800" data-aos-delay="100">
-                <div class="service-image" data-carousel>
-                    <div class="carousel-wrapper">
-                        <div class="carousel-slides">
-                            <img src="FOTO/HHF_0398.jpg" alt="1" loading="lazy">
-                            <img src="FOTO/08.jpg" alt="2" loading="lazy">
-                            <img src="FOTO/09.jpg" alt="3" loading="lazy">
+            <div class="carousel-container-main" id="carouselContainer" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
+                <div class="carousel-track-main" id="carouselTrack">
+                    <!-- Card 1 - Montanhas -->
+                    <div class="service-card-carousel" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
+                        <div class="mini-carousel" data-mini-index="0">
+                            <div class="mini-track">
+                                <img src="https://picsum.photos/id/1015/600/400" alt="Montanha 1" loading="lazy">
+                                <img src="https://picsum.photos/id/1016/600/400" alt="Montanha 2" loading="lazy">
+                                <img src="https://picsum.photos/id/1018/600/400" alt="Montanha 3" loading="lazy">
+                            </div>
+                        </div>
+                        <div class="mini-dots" data-mini-dots="0">
+                            <button class="mini-dot active" data-index="0"></button>
+                            <button class="mini-dot" data-index="1"></button>
+                            <button class="mini-dot" data-index="2"></button>
+                        </div>
+                        <div class="card-content">
+                            <h3><strong>Montanhas</strong></h3>
+                            <p>🌄 Aventura & natureza</p>
+                        </div>
+                        <div class="card-instagram">
+                            <a href="https://www.instagram.com/seu_perfil_aqui" target="_blank">
+                                <i class="fab fa-instagram"></i>
+                                <span>@seu_perfil</span>
+                            </a>
                         </div>
                     </div>
-                    <span class="slide-counter">1 / 3</span>
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
+
+                    <!-- Card 2 - Retrato -->
+                    <div class="service-card-carousel" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                        <div class="mini-carousel" data-mini-index="1">
+                            <div class="mini-track">
+                                <img src="https://picsum.photos/id/1043/600/400" alt="Retrato 1" loading="lazy">
+                                <img src="https://picsum.photos/id/1044/600/400" alt="Retrato 2" loading="lazy">
+                                <img src="https://picsum.photos/id/1045/600/400" alt="Retrato 3" loading="lazy">
+                            </div>
+                        </div>
+                        <div class="mini-dots" data-mini-dots="1">
+                            <button class="mini-dot active" data-index="0"></button>
+                            <button class="mini-dot" data-index="1"></button>
+                            <button class="mini-dot" data-index="2"></button>
+                        </div>
+                        <div class="card-content">
+                            <h3><strong>Retrato</strong></h3>
+                            <p>🧑‍🎨 Expressão & arte</p>
+                        </div>
+                        <div class="card-instagram">
+                            <a href="https://www.instagram.com/seu_perfil_aqui" target="_blank">
+                                <i class="fab fa-instagram"></i>
+                                <span>@seu_perfil</span>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="service-body">
-                    <h4>Premium Açaí</h4>
-                    <p>Açaí cremoso, café gourmet e muito mais.</p>
-                    <a href="https://www.instagram.com/premiumacaibv/" class="btn-instagram" target="_blank">
-                        <i class="fab fa-instagram"></i> Siga no Instagram
-                    </a>
+
+                    <!-- Card 3 - Flores -->
+                    <div class="service-card-carousel" data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">
+                        <div class="mini-carousel" data-mini-index="2">
+                            <div class="mini-track">
+                                <img src="https://picsum.photos/id/106/600/400" alt="Flor 1" loading="lazy">
+                                <img src="https://picsum.photos/id/107/600/400" alt="Flor 2" loading="lazy">
+                                <img src="https://picsum.photos/id/108/600/400" alt="Flor 3" loading="lazy">
+                            </div>
+                        </div>
+                        <div class="mini-dots" data-mini-dots="2">
+                            <button class="mini-dot active" data-index="0"></button>
+                            <button class="mini-dot" data-index="1"></button>
+                            <button class="mini-dot" data-index="2"></button>
+                        </div>
+                        <div class="card-content">
+                            <h3><strong>Flores</strong></h3>
+                            <p>🌸 Primavera eterna</p>
+                        </div>
+                        <div class="card-instagram">
+                            <a href="https://www.instagram.com/seu_perfil_aqui" target="_blank">
+                                <i class="fab fa-instagram"></i>
+                                <span>@seu_perfil</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 - Cachoeira -->
+                    <div class="service-card-carousel" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
+                        <div class="mini-carousel" data-mini-index="3">
+                            <div class="mini-track">
+                                <img src="https://picsum.photos/id/1049/600/400" alt="Cachoeira 1" loading="lazy">
+                                <img src="https://picsum.photos/id/1050/600/400" alt="Cachoeira 2" loading="lazy">
+                                <img src="https://picsum.photos/id/1051/600/400" alt="Cachoeira 3" loading="lazy">
+                            </div>
+                        </div>
+                        <div class="mini-dots" data-mini-dots="3">
+                            <button class="mini-dot active" data-index="0"></button>
+                            <button class="mini-dot" data-index="1"></button>
+                            <button class="mini-dot" data-index="2"></button>
+                        </div>
+                        <div class="card-content">
+                            <h3><strong>Cachoeira</strong></h3>
+                            <p>💦 Força & serenidade</p>
+                        </div>
+                        <div class="card-instagram">
+                            <a href="https://www.instagram.com/seu_perfil_aqui" target="_blank">
+                                <i class="fab fa-instagram"></i>
+                                <span>@seu_perfil</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="service-card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
-                <div class="service-image" data-carousel>
-                    <div class="carousel-wrapper">
-                        <div class="carousel-slides">
-                            <img src="07.jpg" alt="1" loading="lazy">
-                            <img src="FOTO/08.jpg" alt="2" loading="lazy">
-                            <img src="FOTO/09.jpg" alt="3" loading="lazy">
-                        </div>
-                    </div>
-                    <span class="slide-counter">1 / 3</span>
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
-                    </div>
-                </div>
-                <div class="service-body">
-                    <h4>Conveniência Bolota</h4>
-                    <p>Snacks, bebidas e itens essenciais.</p>
-                    <a href="https://www.instagram.com/convenienciadobolotarr/" class="btn-instagram" target="_blank">
-                        <i class="fab fa-instagram"></i> Siga no Instagram
-                    </a>
-                </div>
-            </div>
-
-            <div class="service-card" data-aos="fade-left" data-aos-duration="800" data-aos-delay="300">
-                <div class="service-image" data-carousel>
-                    <div class="carousel-wrapper">
-                        <div class="carousel-slides">
-                            <img src="FOTO/HHF_0398.jpg" alt="1" loading="lazy">
-                            <img src="FOTO/08.jpg" alt="2" loading="lazy">
-                            <img src="FOTO/09.jpg" alt="3" loading="lazy">
-                        </div>
-                    </div>
-                    <span class="slide-counter">1 / 3</span>
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
-                    </div>
-                </div>
-                <div class="service-body">
-                    <h4>Help Pragas</h4>
-                    <p>Dedetização e controle de pragas.</p>
-                    <a href="https://www.instagram.com/helppragas/" class="btn-instagram" target="_blank">
-                        <i class="fab fa-instagram"></i> Siga no Instagram
-                    </a>
-                </div>
-            </div>
-
-            <div class="service-card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
-                <div class="service-image" data-carousel>
-                    <div class="carousel-wrapper">
-                        <div class="carousel-slides">
-                            <img src="FOTO/HHF_0398.jpg" alt="1" loading="lazy">
-                            <img src="FOTO/08.jpg" alt="2" loading="lazy">
-                            <img src="FOTO/09.jpg" alt="3" loading="lazy">
-                        </div>
-                    </div>
-                    <span class="slide-counter">1 / 3</span>
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
-                    </div>
-                </div>
-                <div class="service-body">
-                    <h4>Econorte</h4>
-                    <p>Produtos e serviços automotivos.</p>
-                    <a href="https://www.instagram.com/econorterr/" class="btn-instagram" target="_blank">
-                        <i class="fab fa-instagram"></i> Siga no Instagram
-                    </a>
-                </div>
+            <div class="info-bar" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                <span><i class="fas fa-arrows-alt-h"></i> Arraste com o mouse</span>
+                <span class="auto-badge"><i class="fas fa-play"></i> Rolagem automática</span>
             </div>
         </div>
 
         <!-- LUBRIFICANTES -->
         <div class="lub-carrossel-wrapper" data-aos="fade-up" data-aos-duration="1000">
-            <h2 class="lub-carrossel-titulo">
+            <h2 class="lub-carrossel-titulo" data-aos="fade-down" data-aos-duration="800">
                 Lubrificante <span class="lub-destaque-vermelho">Automotivo</span>
             </h2>
-            <div class="lub-carrossel-container" id="lubContainer">
+            <div class="lub-carrossel-container" id="lubContainer" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
                 <div class="lub-carrossel-track" id="lubTrack"></div>
             </div>
         </div>
 
         <!-- PARCEIROS -->
         <div class="parceiros-wrapper" data-aos="fade-up" data-aos-duration="1000">
-            <h2 class="carousel-title">
+            <h2 class="carousel-title" data-aos="fade-down" data-aos-duration="800">
                 Nossos <span class="highlight">Parceiros</span>
             </h2>
-            <div class="parceiros-carousel-container" id="parceirosContainer">
+            <div class="parceiros-carousel-container" id="parceirosContainer" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
                 <div class="parceiros-carousel-track" id="parceirosTrack"></div>
             </div>
         </div>
@@ -370,16 +391,16 @@
     <footer class="footer" data-aos="fade-up" data-aos-duration="800">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-logo">
+                <div class="footer-logo" data-aos="fade-right" data-aos-duration="800">
                     <img src="Logo do Posto site/HORIZONTAL BRANCA- transparente.png" alt="Logo" loading="lazy">
                 </div>
-                <div class="footer-links">
+                <div class="footer-links" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
                     <a href="#">Sobre</a>
                     <a href="#">Imprensa</a>
                     <a href="#">Trabalhe conosco</a>
                     <a href="#">Política de qualidade</a>
                 </div>
-                <div class="footer-social">
+                <div class="footer-social" data-aos="fade-left" data-aos-duration="800" data-aos-delay="200">
                     <a href="https://www.instagram.com/autopostoestreladalvarr/" target="_blank">
                         <i class="fab fa-instagram"></i>
                     </a>
@@ -388,7 +409,7 @@
                     </a>
                 </div>
             </div>
-            <div class="footer-copy">
+            <div class="footer-copy" data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">
                 <i class="fas fa-gas-pump" style="color:var(--red); margin-right:6px;"></i> 
                 Auto Posto Estrela D'alva · 2024
             </div>
