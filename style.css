@@ -731,7 +731,7 @@ body {
 
 .mini-track {
     display: flex;
-    transition: transform 0.8s ease-in-out;
+    transition: transform 1.5s ease-in-out;
     height: 100%;
     transform: translateZ(0);
     -webkit-transform: translateZ(0);

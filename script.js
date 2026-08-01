@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
         goToSlide(0, false);
     }
 
-    // ===== CARROSSEL PRINCIPAL - SERVIÇOS =====
+    // ===== CARROSSEL PRINCIPAL - SERVIÇOS (INFINITO) =====
     var container = document.getElementById('carouselContainer');
     var track = document.getElementById('carouselTrack');
 
@@ -356,7 +356,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ===== MINI CARROSSEIS =====
+    // ===== MINI CARROSSEIS (DENTRO DOS CARDS) - INFINITO =====
     function initMiniCarousels() {
         var miniCarousels = document.querySelectorAll('.mini-carousel');
 
@@ -384,7 +384,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             function startMiniAuto() {
                 stopMiniAuto();
-                miniInterval = setInterval(nextImage, 4000);
+                // 20 SEGUNDOS - INFINITO
+                miniInterval = setInterval(nextImage, 20000);
             }
 
             function stopMiniAuto() {
@@ -410,21 +411,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
     initMiniCarousels();
 
-    // ===== BRINDES =====
+    // ===== BRINDES DO APLICATIVO - INFINITO =====
     var trackBrinde = document.getElementById('trackBrinde');
     if (trackBrinde) {
+        // Duplica o conteúdo para efeito infinito
         trackBrinde.innerHTML = trackBrinde.innerHTML + trackBrinde.innerHTML + trackBrinde.innerHTML;
 
         var position = 0;
         var paused = false;
+        var brindeInterval = null;
 
-        function animate() {
-            if (!paused) {
-                position -= 0.6;
+        function moveBrinde() {
+            if (!paused && !isDragging) {
+                position -= 0.3;
                 if (position <= -trackBrinde.scrollWidth / 3) position = 0;
                 trackBrinde.style.transform = 'translateX(' + position + 'px)';
             }
-            requestAnimationFrame(animate);
+        }
+
+        function startBrindeAuto() {
+            if (brindeInterval) clearInterval(brindeInterval);
+            brindeInterval = setInterval(moveBrinde, 20);
+        }
+
+        function stopBrindeAuto() {
+            if (brindeInterval) {
+                clearInterval(brindeInterval);
+                brindeInterval = null;
+            }
         }
 
         var scrollWrapper = document.getElementById('scrollWrapper');
@@ -433,11 +447,13 @@ document.addEventListener('DOMContentLoaded', function() {
             scrollWrapper.addEventListener('mouseenter', function() {
                 paused = true;
                 document.getElementById('statusTexto').textContent = '⏸️ Pausado';
+                stopBrindeAuto();
             });
 
             scrollWrapper.addEventListener('mouseleave', function() {
                 paused = false;
                 document.getElementById('statusTexto').textContent = '▶️ Arraste para explorar';
+                startBrindeAuto();
             });
         }
 
@@ -452,6 +468,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 paused = true;
                 startX = e.clientX;
                 startPos = position;
+                stopBrindeAuto();
             });
         }
 
@@ -465,6 +482,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (isDragging) {
                 isDragging = false;
                 paused = false;
+                startBrindeAuto();
             }
         });
 
@@ -475,6 +493,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 paused = true;
                 startX = e.touches[0].clientX;
                 startPos = position;
+                stopBrindeAuto();
             });
 
             scrollWrapper.addEventListener('touchmove', function(e) {
@@ -487,11 +506,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (isDragging) {
                     isDragging = false;
                     paused = false;
+                    startBrindeAuto();
                 }
             });
         }
 
-        animate();
+        startBrindeAuto();
 
         document.querySelectorAll('.btn-resgatar').forEach(function(btn) {
             btn.addEventListener('click', function() {
@@ -500,7 +520,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ===== LUBRIFICANTES =====
+    // ===== LUBRIFICANTE AUTOMOTIVO - INFINITO =====
     var lubContainer = document.getElementById('lubContainer');
     var lubTrack = document.getElementById('lubTrack');
 
@@ -528,6 +548,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 '</div>';
         }).join('');
 
+        // Duplica para efeito infinito
         lubTrack.innerHTML = html + html + html;
 
         var position = 0;
@@ -535,18 +556,30 @@ document.addEventListener('DOMContentLoaded', function() {
         var startX = 0;
         var startPos = 0;
         var paused = false;
+        var lubInterval = null;
 
-        function updatePosition() {
+        function updateLubPosition() {
             lubTrack.style.transform = 'translateX(' + position + 'px)';
         }
 
-        function autoScroll() {
+        function moveLub() {
             if (!paused && !isDragging) {
-                position -= 0.8;
+                position -= 0.4;
                 if (position <= -lubTrack.scrollWidth / 3) position = 0;
-                updatePosition();
+                updateLubPosition();
             }
-            requestAnimationFrame(autoScroll);
+        }
+
+        function startLubAuto() {
+            if (lubInterval) clearInterval(lubInterval);
+            lubInterval = setInterval(moveLub, 20);
+        }
+
+        function stopLubAuto() {
+            if (lubInterval) {
+                clearInterval(lubInterval);
+                lubInterval = null;
+            }
         }
 
         lubContainer.addEventListener('mousedown', function(e) {
@@ -556,12 +589,13 @@ document.addEventListener('DOMContentLoaded', function() {
             lubTrack.style.transition = 'none';
             lubTrack.classList.add('dragging');
             lubContainer.classList.add('dragging');
+            stopLubAuto();
         });
 
         window.addEventListener('mousemove', function(e) {
             if (!isDragging) return;
             position = startPos + (e.clientX - startX);
-            updatePosition();
+            updateLubPosition();
         });
 
         window.addEventListener('mouseup', function() {
@@ -570,6 +604,7 @@ document.addEventListener('DOMContentLoaded', function() {
             lubTrack.classList.remove('dragging');
             lubContainer.classList.remove('dragging');
             lubTrack.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            startLubAuto();
         });
 
         lubContainer.addEventListener('touchstart', function(e) {
@@ -577,29 +612,38 @@ document.addEventListener('DOMContentLoaded', function() {
             startX = e.touches[0].clientX;
             startPos = position;
             lubTrack.style.transition = 'none';
+            stopLubAuto();
         });
 
         lubContainer.addEventListener('touchmove', function(e) {
             if (!isDragging) return;
             position = startPos + (e.touches[0].clientX - startX);
-            updatePosition();
+            updateLubPosition();
         });
 
         lubContainer.addEventListener('touchend', function() {
             if (!isDragging) return;
             isDragging = false;
             lubTrack.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            startLubAuto();
         });
 
-        lubContainer.addEventListener('mouseenter', function() { paused = true; });
+        lubContainer.addEventListener('mouseenter', function() { 
+            paused = true; 
+            stopLubAuto(); 
+        });
+        
         lubContainer.addEventListener('mouseleave', function() {
-            if (!isDragging) paused = false;
+            if (!isDragging) {
+                paused = false;
+                startLubAuto();
+            }
         });
 
-        autoScroll();
+        startLubAuto();
     }
 
-    // ===== PARCEIROS =====
+    // ===== NOSSOS PARCEIROS - INFINITO =====
     var parceirosContainer = document.getElementById('parceirosContainer');
     var parceirosTrack = document.getElementById('parceirosTrack');
 
@@ -617,6 +661,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 '</div>';
         }).join('');
 
+        // Duplica para efeito infinito
         parceirosTrack.innerHTML = html + html + html;
 
         var position = 0;
@@ -624,18 +669,30 @@ document.addEventListener('DOMContentLoaded', function() {
         var startX = 0;
         var startPos = 0;
         var paused = false;
+        var parceirosInterval = null;
 
-        function updatePosition() {
+        function updateParceirosPosition() {
             parceirosTrack.style.transform = 'translateX(' + position + 'px)';
         }
 
-        function autoScroll() {
+        function moveParceiros() {
             if (!paused && !isDragging) {
-                position -= 0.5;
+                position -= 0.25;
                 if (position <= -parceirosTrack.scrollWidth / 3) position = 0;
-                updatePosition();
+                updateParceirosPosition();
             }
-            requestAnimationFrame(autoScroll);
+        }
+
+        function startParceirosAuto() {
+            if (parceirosInterval) clearInterval(parceirosInterval);
+            parceirosInterval = setInterval(moveParceiros, 20);
+        }
+
+        function stopParceirosAuto() {
+            if (parceirosInterval) {
+                clearInterval(parceirosInterval);
+                parceirosInterval = null;
+            }
         }
 
         parceirosContainer.addEventListener('mousedown', function(e) {
@@ -645,12 +702,13 @@ document.addEventListener('DOMContentLoaded', function() {
             parceirosTrack.style.transition = 'none';
             parceirosTrack.classList.add('dragging');
             parceirosContainer.classList.add('dragging');
+            stopParceirosAuto();
         });
 
         window.addEventListener('mousemove', function(e) {
             if (!isDragging) return;
             position = startPos + (e.clientX - startX);
-            updatePosition();
+            updateParceirosPosition();
         });
 
         window.addEventListener('mouseup', function() {
@@ -659,6 +717,7 @@ document.addEventListener('DOMContentLoaded', function() {
             parceirosTrack.classList.remove('dragging');
             parceirosContainer.classList.remove('dragging');
             parceirosTrack.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            startParceirosAuto();
         });
 
         parceirosContainer.addEventListener('touchstart', function(e) {
@@ -666,25 +725,34 @@ document.addEventListener('DOMContentLoaded', function() {
             startX = e.touches[0].clientX;
             startPos = position;
             parceirosTrack.style.transition = 'none';
+            stopParceirosAuto();
         });
 
         parceirosContainer.addEventListener('touchmove', function(e) {
             if (!isDragging) return;
             position = startPos + (e.touches[0].clientX - startX);
-            updatePosition();
+            updateParceirosPosition();
         });
 
         parceirosContainer.addEventListener('touchend', function() {
             if (!isDragging) return;
             isDragging = false;
             parceirosTrack.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            startParceirosAuto();
         });
 
-        parceirosContainer.addEventListener('mouseenter', function() { paused = true; });
+        parceirosContainer.addEventListener('mouseenter', function() { 
+            paused = true; 
+            stopParceirosAuto(); 
+        });
+        
         parceirosContainer.addEventListener('mouseleave', function() {
-            if (!isDragging) paused = false;
+            if (!isDragging) {
+                paused = false;
+                startParceirosAuto();
+            }
         });
 
-        autoScroll();
+        startParceirosAuto();
     }
 });
