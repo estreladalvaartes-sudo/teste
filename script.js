@@ -133,15 +133,21 @@ document.addEventListener('DOMContentLoaded', function() {
         goToSlide(0, false);
     }
 
-    // ===== CARROSSEL PRINCIPAL - SERVIÇOS (INFINITO) =====
-    var container = document.getElementById('carouselContainer');
-    var track = document.getElementById('carouselTrack');
+    // ================================================================
+    // ===== 1. CARROSSEL DE SERVIÇOS - INFINITO =====
+    // ================================================================
+    function initCarrosselServicos() {
+        var container = document.getElementById('carouselContainer');
+        var track = document.getElementById('carouselTrack');
 
-    if (container && track) {
+        if (!container || !track) return;
+
+        // Duplica os cards para efeito infinito
+        var cards = track.innerHTML;
+        track.innerHTML = cards + cards + cards;
+
+        var visibleCount = 0;
         var currentIndex = 0;
-        var visibleCount = getVisibleCards();
-        var maxIndex = Math.max(0, track.children.length - visibleCount);
-
         var isDragging = false;
         var startX = 0;
         var currentTranslateX = 0;
@@ -152,49 +158,73 @@ document.addEventListener('DOMContentLoaded', function() {
         var AUTO_INTERVAL_MS = 3500;
         var pauseTimeout = null;
 
+        function getCardWidth() {
+            var firstCard = track.querySelector('.service-card-carousel');
+            if (!firstCard) return 320;
+            var cardStyle = window.getComputedStyle(firstCard);
+            return firstCard.offsetWidth + parseFloat(cardStyle.marginLeft) + parseFloat(cardStyle.marginRight);
+        }
+
         function getVisibleCards() {
             var containerWidth = container.clientWidth;
-            var firstCard = track.querySelector('.service-card-carousel');
-            if (!firstCard) return 4;
-            var cardStyle = window.getComputedStyle(firstCard);
-            var cardWidth = firstCard.offsetWidth + parseFloat(cardStyle.marginLeft) + parseFloat(cardStyle.marginRight);
-            if (cardWidth === 0) return 4;
-            var visible = Math.floor(containerWidth / cardWidth);
+            var width = getCardWidth();
+            if (width === 0) return 4;
+            var visible = Math.floor(containerWidth / width);
             return Math.min(visible, 4);
         }
 
+        function getTotalCards() {
+            return track.querySelectorAll('.service-card-carousel').length;
+        }
+
         function getOffsetForIndex(index) {
-            var firstCard = track.querySelector('.service-card-carousel');
-            if (!firstCard) return 0;
-            var cardStyle = window.getComputedStyle(firstCard);
-            var cardWidth = firstCard.offsetWidth + parseFloat(cardStyle.marginLeft) + parseFloat(cardStyle.marginRight);
-            return -index * cardWidth;
+            var width = getCardWidth();
+            return -index * width;
         }
 
         function setTrackPosition(index, animate) {
             if (animate === undefined) animate = true;
-            currentIndex = Math.min(Math.max(0, index), maxIndex);
-            var offset = getOffsetForIndex(currentIndex);
+            var total = getTotalCards() / 3;
+            var offset = getOffsetForIndex(index);
+            
+            if (index >= total * 2) {
+                track.style.transition = 'none';
+                track.style.transform = 'translateX(' + getOffsetForIndex(0) + 'px)';
+                currentTranslateX = getOffsetForIndex(0);
+                currentIndex = 0;
+                setTimeout(function() {
+                    track.style.transition = animate ? 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none';
+                    track.style.transform = 'translateX(' + getOffsetForIndex(0) + 'px)';
+                    currentTranslateX = getOffsetForIndex(0);
+                }, 10);
+                return;
+            }
+            
+            if (index < 0) {
+                track.style.transition = 'none';
+                track.style.transform = 'translateX(' + getOffsetForIndex(total * 2 - visibleCount) + 'px)';
+                currentTranslateX = getOffsetForIndex(total * 2 - visibleCount);
+                currentIndex = total * 2 - visibleCount;
+                setTimeout(function() {
+                    track.style.transition = animate ? 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none';
+                    track.style.transform = 'translateX(' + getOffsetForIndex(total * 2 - visibleCount) + 'px)';
+                    currentTranslateX = getOffsetForIndex(total * 2 - visibleCount);
+                }, 10);
+                return;
+            }
+
             track.style.transition = animate ? 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none';
             track.style.transform = 'translateX(' + offset + 'px)';
             currentTranslateX = offset;
+            currentIndex = index;
         }
 
         function recalcVisible() {
-            var newVisible = getVisibleCards();
-            if (newVisible !== visibleCount) {
-                visibleCount = newVisible;
-                maxIndex = Math.max(0, track.children.length - visibleCount);
-                if (currentIndex > maxIndex) currentIndex = maxIndex;
-                setTrackPosition(currentIndex, false);
-            } else {
-                if (currentIndex > maxIndex) {
-                    currentIndex = maxIndex;
-                    setTrackPosition(currentIndex, false);
-                } else {
-                    setTrackPosition(currentIndex, false);
-                }
-            }
+            visibleCount = getVisibleCards();
+            var total = getTotalCards() / 3;
+            var maxIndex = total * 2 - visibleCount;
+            if (currentIndex > maxIndex) currentIndex = maxIndex;
+            setTrackPosition(currentIndex, false);
         }
 
         function startAutoPlay() {
@@ -222,6 +252,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         function goToNext() {
+            var total = getTotalCards() / 3;
+            var maxIndex = total * 2 - visibleCount;
             if (currentIndex < maxIndex) {
                 currentIndex++;
             } else {
@@ -265,14 +297,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (Math.abs(deltaX) > 5) isMoved = true;
 
             var newOffset = initialTrackOffset + deltaX;
-            var firstCard = track.querySelector('.service-card-carousel');
-            if (firstCard) {
-                var cardStyle = window.getComputedStyle(firstCard);
-                var cardWidth = firstCard.offsetWidth + parseFloat(cardStyle.marginLeft) + parseFloat(cardStyle.marginRight);
-                var minOffset = getOffsetForIndex(maxIndex);
-                var maxOffset = 0;
-                newOffset = Math.min(Math.max(newOffset, minOffset), maxOffset);
-            }
+            var width = getCardWidth();
+            var total = getTotalCards() / 3;
+            var minOffset = getOffsetForIndex(total * 2 - visibleCount);
+            var maxOffset = getOffsetForIndex(0);
+            newOffset = Math.min(Math.max(newOffset, minOffset), maxOffset);
             track.style.transform = 'translateX(' + newOffset + 'px)';
             currentTranslateX = newOffset;
         }
@@ -293,17 +322,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            var firstCard = track.querySelector('.service-card-carousel');
-            if (!firstCard) return;
-            var cardStyle = window.getComputedStyle(firstCard);
-            var cardWidth = firstCard.offsetWidth + parseFloat(cardStyle.marginLeft) + parseFloat(cardStyle.marginRight);
-
-            var approxIndex = -currentTranslateX / cardWidth;
+            var width = getCardWidth();
+            var approxIndex = -currentTranslateX / width;
             var targetIndex = Math.round(approxIndex);
-            targetIndex = Math.min(Math.max(0, targetIndex), maxIndex);
+            var total = getTotalCards() / 3;
+            targetIndex = Math.min(Math.max(0, targetIndex), total * 2 - visibleCount);
 
             var offsetDiff = Math.abs(currentTranslateX - getOffsetForIndex(targetIndex));
-            if (offsetDiff < cardWidth * 0.2 && targetIndex === currentIndex) {
+            if (offsetDiff < width * 0.2 && targetIndex === currentIndex) {
                 setTrackPosition(currentIndex, true);
             } else {
                 currentIndex = targetIndex;
@@ -328,7 +354,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Inicializa
         visibleCount = getVisibleCards();
-        maxIndex = Math.max(0, track.children.length - visibleCount);
         currentIndex = 0;
         setTrackPosition(0, false);
 
@@ -356,7 +381,372 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // ================================================================
+    // ===== 2. CARROSSEL DE BRINDES - INFINITO =====
+    // ================================================================
+    function initCarrosselBrindes() {
+        var container = document.getElementById('scrollWrapper');
+        var track = document.getElementById('trackBrinde');
+
+        if (!container || !track) return;
+
+        // Duplica os cards para efeito infinito
+        var cards = track.innerHTML;
+        track.innerHTML = cards + cards + cards;
+
+        var position = 0;
+        var isDragging = false;
+        var startX = 0;
+        var startPos = 0;
+        var paused = false;
+        var autoInterval = null;
+        var AUTO_INTERVAL_MS = 20;
+        var SPEED = 0.3;
+
+        function getCardWidth() {
+            var firstCard = track.querySelector('.card-brinde');
+            if (!firstCard) return 250;
+            return firstCard.offsetWidth + 20; // 20 é o gap
+        }
+
+        function getTotalWidth() {
+            return track.scrollWidth / 3;
+        }
+
+        function moveTrack() {
+            if (!paused && !isDragging) {
+                position -= SPEED;
+                if (position <= -getTotalWidth()) {
+                    position = 0;
+                }
+                track.style.transform = 'translateX(' + position + 'px)';
+            }
+        }
+
+        function startAuto() {
+            stopAuto();
+            autoInterval = setInterval(moveTrack, AUTO_INTERVAL_MS);
+        }
+
+        function stopAuto() {
+            if (autoInterval) {
+                clearInterval(autoInterval);
+                autoInterval = null;
+            }
+        }
+
+        function onDragStart(e) {
+            if (e.target.closest('.btn-resgatar')) return;
+            isDragging = true;
+            paused = true;
+            var clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            startX = clientX;
+            startPos = position;
+            stopAuto();
+            document.getElementById('statusTexto').textContent = '⏸️ Pausado';
+        }
+
+        function onDragMove(e) {
+            if (!isDragging) return;
+            var clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            position = startPos + (clientX - startX);
+            if (position > 0) position = 0;
+            if (position < -getTotalWidth()) position = -getTotalWidth();
+            track.style.transform = 'translateX(' + position + 'px)';
+        }
+
+        function onDragEnd() {
+            if (!isDragging) return;
+            isDragging = false;
+            paused = false;
+            document.getElementById('statusTexto').textContent = '▶️ Arraste para explorar';
+            startAuto();
+        }
+
+        container.addEventListener('mousedown', onDragStart);
+        window.addEventListener('mousemove', onDragMove);
+        window.addEventListener('mouseup', onDragEnd);
+
+        container.addEventListener('touchstart', onDragStart, { passive: true });
+        window.addEventListener('touchmove', onDragMove, { passive: true });
+        window.addEventListener('touchend', onDragEnd);
+
+        container.addEventListener('mouseenter', function() { 
+            paused = true; 
+            stopAuto(); 
+            document.getElementById('statusTexto').textContent = '⏸️ Pausado';
+        });
+        
+        container.addEventListener('mouseleave', function() {
+            if (!isDragging) {
+                paused = false;
+                document.getElementById('statusTexto').textContent = '▶️ Arraste para explorar';
+                startAuto();
+            }
+        });
+
+        startAuto();
+
+        document.querySelectorAll('.btn-resgatar').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                window.open('http://play.google.com/store/apps/details?id=com.coffeeincode.postoaki.rede368&hl=pt_BR', '_blank');
+            });
+        });
+    }
+
+    // ================================================================
+    // ===== 3. CARROSSEL DE LUBRIFICANTES - INFINITO =====
+    // ================================================================
+    function initCarrosselLubrificantes() {
+        var container = document.getElementById('lubContainer');
+        var track = document.getElementById('lubTrack');
+
+        if (!container || !track) return;
+
+        var products = [
+            { nome: 'Mobil Super Sintético 5W30', preco: 'R$ 89,90', precoAntigo: 'R$ 119,90', imagem: 'OLEO/OLEO 01.png' },
+            { nome: 'Mobil Super 10W40', preco: 'R$ 79,90', precoAntigo: 'R$ 99,90', imagem: 'OLEO/OLEO 01.png' },
+            { nome: 'Mobil Super 15W40', preco: 'R$ 99,90', precoAntigo: 'R$ 129,90', imagem: 'OLEO/OLEO 01.png' },
+            { nome: 'Aditivo Motor Mobil', preco: 'R$ 49,90', precoAntigo: 'R$ 69,90', imagem: 'OLEO/OLEO 01.png' },
+            { nome: 'Fluído Freio Mobil', preco: 'R$ 39,90', precoAntigo: 'R$ 59,90', imagem: 'OLEO/OLEO 01.png' },
+            { nome: 'Mobil Multiuso', preco: 'R$ 29,90', precoAntigo: 'R$ 44,90', imagem: 'OLEO/OLEO 01.png' },
+            { nome: 'Graxa Mobil', preco: 'R$ 34,90', precoAntigo: 'R$ 49,90', imagem: 'OLEO/OLEO 01.png' }
+        ];
+
+        var html = products.map(function(p) {
+            return '<div class="lub-card">' +
+                '<div class="lub-imagem-wrapper">' +
+                '<img src="' + p.imagem + '" alt="' + p.nome + '" class="lub-imagem-zoom" loading="lazy">' +
+                '</div>' +
+                '<div class="lub-nome-produto">' + p.nome + '</div>' +
+                '<div class="lub-preco">' +
+                (p.precoAntigo ? '<span class="lub-preco-antigo">' + p.precoAntigo + '</span>' : '') +
+                p.preco +
+                '</div>' +
+                '</div>';
+        }).join('');
+
+        // Duplica para efeito infinito
+        track.innerHTML = html + html + html;
+
+        var position = 0;
+        var isDragging = false;
+        var startX = 0;
+        var startPos = 0;
+        var paused = false;
+        var autoInterval = null;
+        var AUTO_INTERVAL_MS = 20;
+        var SPEED = 0.4;
+
+        function getCardWidth() {
+            var firstCard = track.querySelector('.lub-card');
+            if (!firstCard) return 200;
+            return firstCard.offsetWidth + 24; // 24 é o gap (1.5rem)
+        }
+
+        function getTotalWidth() {
+            return track.scrollWidth / 3;
+        }
+
+        function moveTrack() {
+            if (!paused && !isDragging) {
+                position -= SPEED;
+                if (position <= -getTotalWidth()) {
+                    position = 0;
+                }
+                track.style.transform = 'translateX(' + position + 'px)';
+            }
+        }
+
+        function startAuto() {
+            stopAuto();
+            autoInterval = setInterval(moveTrack, AUTO_INTERVAL_MS);
+        }
+
+        function stopAuto() {
+            if (autoInterval) {
+                clearInterval(autoInterval);
+                autoInterval = null;
+            }
+        }
+
+        function onDragStart(e) {
+            isDragging = true;
+            paused = true;
+            var clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            startX = clientX;
+            startPos = position;
+            stopAuto();
+            track.style.transition = 'none';
+            track.classList.add('dragging');
+            container.classList.add('dragging');
+        }
+
+        function onDragMove(e) {
+            if (!isDragging) return;
+            var clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            position = startPos + (clientX - startX);
+            if (position > 0) position = 0;
+            if (position < -getTotalWidth()) position = -getTotalWidth();
+            track.style.transform = 'translateX(' + position + 'px)';
+        }
+
+        function onDragEnd() {
+            if (!isDragging) return;
+            isDragging = false;
+            paused = false;
+            track.classList.remove('dragging');
+            container.classList.remove('dragging');
+            track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            startAuto();
+        }
+
+        container.addEventListener('mousedown', onDragStart);
+        window.addEventListener('mousemove', onDragMove);
+        window.addEventListener('mouseup', onDragEnd);
+
+        container.addEventListener('touchstart', onDragStart, { passive: true });
+        window.addEventListener('touchmove', onDragMove, { passive: true });
+        window.addEventListener('touchend', onDragEnd);
+
+        container.addEventListener('mouseenter', function() { 
+            paused = true; 
+            stopAuto(); 
+        });
+        
+        container.addEventListener('mouseleave', function() {
+            if (!isDragging) {
+                paused = false;
+                startAuto();
+            }
+        });
+
+        startAuto();
+    }
+
+    // ================================================================
+    // ===== 4. CARROSSEL DE PARCEIROS - INFINITO =====
+    // ================================================================
+    function initCarrosselParceiros() {
+        var container = document.getElementById('parceirosContainer');
+        var track = document.getElementById('parceirosTrack');
+
+        if (!container || !track) return;
+
+        var logos = [
+            { src: 'LOGOS/BOLOTA.PNG', alt: 'Bolota' },
+            { src: 'LOGOS/BRS LOGO.PNG', alt: 'BRS' },
+            { src: 'LOGOS/ECONORTE.PNG', alt: 'Econorte' },
+            { src: 'LOGOS/HELP PRAGAS.PNG', alt: 'Help Pragas' }
+        ];
+
+        var html = logos.map(function(l) {
+            return '<div class="logo-card">' +
+                '<img src="' + l.src + '" alt="' + l.alt + '" loading="lazy">' +
+                '</div>';
+        }).join('');
+
+        // Duplica para efeito infinito
+        track.innerHTML = html + html + html;
+
+        var position = 0;
+        var isDragging = false;
+        var startX = 0;
+        var startPos = 0;
+        var paused = false;
+        var autoInterval = null;
+        var AUTO_INTERVAL_MS = 20;
+        var SPEED = 0.25;
+
+        function getCardWidth() {
+            var firstCard = track.querySelector('.logo-card');
+            if (!firstCard) return 150;
+            return firstCard.offsetWidth + 32; // 32 é o gap (2rem)
+        }
+
+        function getTotalWidth() {
+            return track.scrollWidth / 3;
+        }
+
+        function moveTrack() {
+            if (!paused && !isDragging) {
+                position -= SPEED;
+                if (position <= -getTotalWidth()) {
+                    position = 0;
+                }
+                track.style.transform = 'translateX(' + position + 'px)';
+            }
+        }
+
+        function startAuto() {
+            stopAuto();
+            autoInterval = setInterval(moveTrack, AUTO_INTERVAL_MS);
+        }
+
+        function stopAuto() {
+            if (autoInterval) {
+                clearInterval(autoInterval);
+                autoInterval = null;
+            }
+        }
+
+        function onDragStart(e) {
+            isDragging = true;
+            paused = true;
+            var clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            startX = clientX;
+            startPos = position;
+            stopAuto();
+            track.style.transition = 'none';
+            track.classList.add('dragging');
+            container.classList.add('dragging');
+        }
+
+        function onDragMove(e) {
+            if (!isDragging) return;
+            var clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            position = startPos + (clientX - startX);
+            if (position > 0) position = 0;
+            if (position < -getTotalWidth()) position = -getTotalWidth();
+            track.style.transform = 'translateX(' + position + 'px)';
+        }
+
+        function onDragEnd() {
+            if (!isDragging) return;
+            isDragging = false;
+            paused = false;
+            track.classList.remove('dragging');
+            container.classList.remove('dragging');
+            track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            startAuto();
+        }
+
+        container.addEventListener('mousedown', onDragStart);
+        window.addEventListener('mousemove', onDragMove);
+        window.addEventListener('mouseup', onDragEnd);
+
+        container.addEventListener('touchstart', onDragStart, { passive: true });
+        window.addEventListener('touchmove', onDragMove, { passive: true });
+        window.addEventListener('touchend', onDragEnd);
+
+        container.addEventListener('mouseenter', function() { 
+            paused = true; 
+            stopAuto(); 
+        });
+        
+        container.addEventListener('mouseleave', function() {
+            if (!isDragging) {
+                paused = false;
+                startAuto();
+            }
+        });
+
+        startAuto();
+    }
+
+    // ================================================================
     // ===== MINI CARROSSEIS (DENTRO DOS CARDS) - INFINITO =====
+    // ================================================================
     function initMiniCarousels() {
         var miniCarousels = document.querySelectorAll('.mini-carousel');
 
@@ -384,7 +774,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             function startMiniAuto() {
                 stopMiniAuto();
-                // 20 SEGUNDOS - INFINITO
                 miniInterval = setInterval(nextImage, 20000);
             }
 
@@ -409,350 +798,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    initMiniCarousels();
-
-    // ===== BRINDES DO APLICATIVO - INFINITO =====
-    var trackBrinde = document.getElementById('trackBrinde');
-    if (trackBrinde) {
-        // Duplica o conteúdo para efeito infinito
-        trackBrinde.innerHTML = trackBrinde.innerHTML + trackBrinde.innerHTML + trackBrinde.innerHTML;
-
-        var position = 0;
-        var paused = false;
-        var brindeInterval = null;
-
-        function moveBrinde() {
-            if (!paused && !isDragging) {
-                position -= 0.3;
-                if (position <= -trackBrinde.scrollWidth / 3) position = 0;
-                trackBrinde.style.transform = 'translateX(' + position + 'px)';
-            }
-        }
-
-        function startBrindeAuto() {
-            if (brindeInterval) clearInterval(brindeInterval);
-            brindeInterval = setInterval(moveBrinde, 20);
-        }
-
-        function stopBrindeAuto() {
-            if (brindeInterval) {
-                clearInterval(brindeInterval);
-                brindeInterval = null;
-            }
-        }
-
-        var scrollWrapper = document.getElementById('scrollWrapper');
-
-        if (scrollWrapper) {
-            scrollWrapper.addEventListener('mouseenter', function() {
-                paused = true;
-                document.getElementById('statusTexto').textContent = '⏸️ Pausado';
-                stopBrindeAuto();
-            });
-
-            scrollWrapper.addEventListener('mouseleave', function() {
-                paused = false;
-                document.getElementById('statusTexto').textContent = '▶️ Arraste para explorar';
-                startBrindeAuto();
-            });
-        }
-
-        var isDragging = false;
-        var startX = 0;
-        var startPos = 0;
-
-        if (scrollWrapper) {
-            scrollWrapper.addEventListener('mousedown', function(e) {
-                if (e.target.closest('.btn-resgatar')) return;
-                isDragging = true;
-                paused = true;
-                startX = e.clientX;
-                startPos = position;
-                stopBrindeAuto();
-            });
-        }
-
-        window.addEventListener('mousemove', function(e) {
-            if (!isDragging) return;
-            position = startPos + (e.clientX - startX);
-            trackBrinde.style.transform = 'translateX(' + position + 'px)';
-        });
-
-        window.addEventListener('mouseup', function() {
-            if (isDragging) {
-                isDragging = false;
-                paused = false;
-                startBrindeAuto();
-            }
-        });
-
-        if (scrollWrapper) {
-            scrollWrapper.addEventListener('touchstart', function(e) {
-                if (e.target.closest('.btn-resgatar')) return;
-                isDragging = true;
-                paused = true;
-                startX = e.touches[0].clientX;
-                startPos = position;
-                stopBrindeAuto();
-            });
-
-            scrollWrapper.addEventListener('touchmove', function(e) {
-                if (!isDragging) return;
-                position = startPos + (e.touches[0].clientX - startX);
-                trackBrinde.style.transform = 'translateX(' + position + 'px)';
-            });
-
-            scrollWrapper.addEventListener('touchend', function() {
-                if (isDragging) {
-                    isDragging = false;
-                    paused = false;
-                    startBrindeAuto();
-                }
-            });
-        }
-
-        startBrindeAuto();
-
-        document.querySelectorAll('.btn-resgatar').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                window.open('http://play.google.com/store/apps/details?id=com.coffeeincode.postoaki.rede368&hl=pt_BR', '_blank');
-            });
-        });
-    }
-
-    // ===== LUBRIFICANTE AUTOMOTIVO - INFINITO =====
-    var lubContainer = document.getElementById('lubContainer');
-    var lubTrack = document.getElementById('lubTrack');
-
-    if (lubContainer && lubTrack) {
-        var products = [
-            { nome: 'Mobil Super Sintético 5W30', preco: 'R$ 89,90', precoAntigo: 'R$ 119,90', imagem: 'OLEO/OLEO 01.png' },
-            { nome: 'Mobil Super 10W40', preco: 'R$ 79,90', precoAntigo: 'R$ 99,90', imagem: 'OLEO/OLEO 01.png' },
-            { nome: 'Mobil Super 15W40', preco: 'R$ 99,90', precoAntigo: 'R$ 129,90', imagem: 'OLEO/OLEO 01.png' },
-            { nome: 'Aditivo Motor Mobil', preco: 'R$ 49,90', precoAntigo: 'R$ 69,90', imagem: 'OLEO/OLEO 01.png' },
-            { nome: 'Fluído Freio Mobil', preco: 'R$ 39,90', precoAntigo: 'R$ 59,90', imagem: 'OLEO/OLEO 01.png' },
-            { nome: 'Mobil Multiuso', preco: 'R$ 29,90', precoAntigo: 'R$ 44,90', imagem: 'OLEO/OLEO 01.png' },
-            { nome: 'Graxa Mobil', preco: 'R$ 34,90', precoAntigo: 'R$ 49,90', imagem: 'OLEO/OLEO 01.png' }
-        ];
-
-        var html = products.map(function(p) {
-            return '<div class="lub-card">' +
-                '<div class="lub-imagem-wrapper">' +
-                '<img src="' + p.imagem + '" alt="' + p.nome + '" class="lub-imagem-zoom" loading="lazy">' +
-                '</div>' +
-                '<div class="lub-nome-produto">' + p.nome + '</div>' +
-                '<div class="lub-preco">' +
-                (p.precoAntigo ? '<span class="lub-preco-antigo">' + p.precoAntigo + '</span>' : '') +
-                p.preco +
-                '</div>' +
-                '</div>';
-        }).join('');
-
-        // Duplica para efeito infinito
-        lubTrack.innerHTML = html + html + html;
-
-        var position = 0;
-        var isDragging = false;
-        var startX = 0;
-        var startPos = 0;
-        var paused = false;
-        var lubInterval = null;
-
-        function updateLubPosition() {
-            lubTrack.style.transform = 'translateX(' + position + 'px)';
-        }
-
-        function moveLub() {
-            if (!paused && !isDragging) {
-                position -= 0.4;
-                if (position <= -lubTrack.scrollWidth / 3) position = 0;
-                updateLubPosition();
-            }
-        }
-
-        function startLubAuto() {
-            if (lubInterval) clearInterval(lubInterval);
-            lubInterval = setInterval(moveLub, 20);
-        }
-
-        function stopLubAuto() {
-            if (lubInterval) {
-                clearInterval(lubInterval);
-                lubInterval = null;
-            }
-        }
-
-        lubContainer.addEventListener('mousedown', function(e) {
-            isDragging = true;
-            startX = e.clientX;
-            startPos = position;
-            lubTrack.style.transition = 'none';
-            lubTrack.classList.add('dragging');
-            lubContainer.classList.add('dragging');
-            stopLubAuto();
-        });
-
-        window.addEventListener('mousemove', function(e) {
-            if (!isDragging) return;
-            position = startPos + (e.clientX - startX);
-            updateLubPosition();
-        });
-
-        window.addEventListener('mouseup', function() {
-            if (!isDragging) return;
-            isDragging = false;
-            lubTrack.classList.remove('dragging');
-            lubContainer.classList.remove('dragging');
-            lubTrack.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            startLubAuto();
-        });
-
-        lubContainer.addEventListener('touchstart', function(e) {
-            isDragging = true;
-            startX = e.touches[0].clientX;
-            startPos = position;
-            lubTrack.style.transition = 'none';
-            stopLubAuto();
-        });
-
-        lubContainer.addEventListener('touchmove', function(e) {
-            if (!isDragging) return;
-            position = startPos + (e.touches[0].clientX - startX);
-            updateLubPosition();
-        });
-
-        lubContainer.addEventListener('touchend', function() {
-            if (!isDragging) return;
-            isDragging = false;
-            lubTrack.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            startLubAuto();
-        });
-
-        lubContainer.addEventListener('mouseenter', function() { 
-            paused = true; 
-            stopLubAuto(); 
-        });
+    // ================================================================
+    // ===== INICIALIZAR TODOS OS CARROSSÉIS =====
+    // ================================================================
+    
+    // Aguarda o DOM carregar completamente
+    setTimeout(function() {
+        // 1. Serviços
+        initCarrosselServicos();
         
-        lubContainer.addEventListener('mouseleave', function() {
-            if (!isDragging) {
-                paused = false;
-                startLubAuto();
-            }
-        });
-
-        startLubAuto();
-    }
-
-    // ===== NOSSOS PARCEIROS - INFINITO =====
-    var parceirosContainer = document.getElementById('parceirosContainer');
-    var parceirosTrack = document.getElementById('parceirosTrack');
-
-    if (parceirosContainer && parceirosTrack) {
-        var logos = [
-            { src: 'LOGOS/BOLOTA.PNG', alt: 'Bolota' },
-            { src: 'LOGOS/BRS LOGO.PNG', alt: 'BRS' },
-            { src: 'LOGOS/ECONORTE.PNG', alt: 'Econorte' },
-            { src: 'LOGOS/HELP PRAGAS.PNG', alt: 'Help Pragas' }
-        ];
-
-        var html = logos.map(function(l) {
-            return '<div class="logo-card">' +
-                '<img src="' + l.src + '" alt="' + l.alt + '" loading="lazy">' +
-                '</div>';
-        }).join('');
-
-        // Duplica para efeito infinito
-        parceirosTrack.innerHTML = html + html + html;
-
-        var position = 0;
-        var isDragging = false;
-        var startX = 0;
-        var startPos = 0;
-        var paused = false;
-        var parceirosInterval = null;
-
-        function updateParceirosPosition() {
-            parceirosTrack.style.transform = 'translateX(' + position + 'px)';
-        }
-
-        function moveParceiros() {
-            if (!paused && !isDragging) {
-                position -= 0.25;
-                if (position <= -parceirosTrack.scrollWidth / 3) position = 0;
-                updateParceirosPosition();
-            }
-        }
-
-        function startParceirosAuto() {
-            if (parceirosInterval) clearInterval(parceirosInterval);
-            parceirosInterval = setInterval(moveParceiros, 20);
-        }
-
-        function stopParceirosAuto() {
-            if (parceirosInterval) {
-                clearInterval(parceirosInterval);
-                parceirosInterval = null;
-            }
-        }
-
-        parceirosContainer.addEventListener('mousedown', function(e) {
-            isDragging = true;
-            startX = e.clientX;
-            startPos = position;
-            parceirosTrack.style.transition = 'none';
-            parceirosTrack.classList.add('dragging');
-            parceirosContainer.classList.add('dragging');
-            stopParceirosAuto();
-        });
-
-        window.addEventListener('mousemove', function(e) {
-            if (!isDragging) return;
-            position = startPos + (e.clientX - startX);
-            updateParceirosPosition();
-        });
-
-        window.addEventListener('mouseup', function() {
-            if (!isDragging) return;
-            isDragging = false;
-            parceirosTrack.classList.remove('dragging');
-            parceirosContainer.classList.remove('dragging');
-            parceirosTrack.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            startParceirosAuto();
-        });
-
-        parceirosContainer.addEventListener('touchstart', function(e) {
-            isDragging = true;
-            startX = e.touches[0].clientX;
-            startPos = position;
-            parceirosTrack.style.transition = 'none';
-            stopParceirosAuto();
-        });
-
-        parceirosContainer.addEventListener('touchmove', function(e) {
-            if (!isDragging) return;
-            position = startPos + (e.touches[0].clientX - startX);
-            updateParceirosPosition();
-        });
-
-        parceirosContainer.addEventListener('touchend', function() {
-            if (!isDragging) return;
-            isDragging = false;
-            parceirosTrack.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            startParceirosAuto();
-        });
-
-        parceirosContainer.addEventListener('mouseenter', function() { 
-            paused = true; 
-            stopParceirosAuto(); 
-        });
+        // 2. Brindes
+        initCarrosselBrindes();
         
-        parceirosContainer.addEventListener('mouseleave', function() {
-            if (!isDragging) {
-                paused = false;
-                startParceirosAuto();
-            }
-        });
-
-        startParceirosAuto();
-    }
+        // 3. Lubrificantes
+        initCarrosselLubrificantes();
+        
+        // 4. Parceiros
+        initCarrosselParceiros();
+        
+        // 5. Mini Carrosséis
+        initMiniCarousels();
+    }, 100);
 });
